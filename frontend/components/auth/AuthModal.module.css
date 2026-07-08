@@ -1,0 +1,117 @@
+.container {
+  width: 100%;
+  max-width: 450px;
+  max-height: 90vh;
+  overflow-y: auto;
+  padding-bottom: var(--space-4);
+}
+
+.header {
+  text-align: center;
+  margin-bottom: var(--space-6);
+}
+
+.header h2 {
+  font-size: var(--text-xl);
+  font-weight: 700;
+  color: var(--color-primary-deep);
+  margin: 0 0 var(--space-2) 0;
+  letter-spacing: -0.3px;
+}
+
+.header p {
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+  margin: 0;
+  line-height: 1.5;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.formGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-3);
+}
+
+.form .form-group {
+  margin-bottom: 0; /* Override base margin since we control via gap */
+}
+
+.verifyInfo {
+  background: var(--color-info-bg);
+  border: 1px solid #99bbdb;
+  border-radius: var(--radius-sm);
+  padding: var(--space-4);
+  text-align: center;
+  margin-bottom: var(--space-3);
+}
+
+.verifyInfo p {
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+  margin: 0 0 var(--space-1) 0;
+}
+
+.verifyInfo strong {
+  display: block;
+  font-size: var(--text-base);
+  color: var(--color-primary);
+  margin-top: var(--space-1);
+  word-break: break-all;
+}
+
+.footer {
+  text-align: center;
+  padding-top: var(--space-5);
+  margin-top: var(--space-5);
+  border-top: 1px dashed var(--color-border);
+}
+
+.footer p {
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+  margin: 0;
+}
+
+.switchLink {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  color: var(--color-primary);
+  font-weight: 600;
+  text-decoration: none;
+  transition: color 0.15s, text-decoration 0.15s;
+  font-size: inherit;
+}
+
+.switchLink:hover {
+  color: var(--color-primary-hover);
+  text-decoration: underline;
+}
+
+.switchLink:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .container {
+    max-width: 100%;
+  }
+
+  .formGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .header h2 {
+    font-size: var(--text-lg);
+  }
+}

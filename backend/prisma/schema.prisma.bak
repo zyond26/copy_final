@@ -1,0 +1,174 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model audit_logs {
+  id                 BigInt    @id @default(autoincrement())
+  user_id            BigInt?
+  patient_id         BigInt?
+  action             String?   @db.VarChar(100)
+  entity_type        String?   @db.VarChar(50)
+  entity_id          BigInt?
+  ip_address         String?   @db.VarChar(50)
+  break_glass        Boolean?  @default(false)
+  break_glass_reason String?
+  created_at         DateTime? @default(now()) @db.Timestamp(6)
+  patients           patients? @relation(fields: [patient_id], references: [id], onUpdate: NoAction, map: "fk_log_patient")
+  users              users?    @relation(fields: [user_id], references: [id], onUpdate: NoAction, map: "fk_log_user")
+
+  @@index([action], map: "idx_log_action")
+  @@index([patient_id], map: "idx_log_patient")
+  @@index([user_id], map: "idx_log_user")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model medical_records {
+  id            BigInt          @id @default(autoincrement())
+  record_code   String          @unique @db.VarChar(20)
+  patient_id    BigInt
+  doctor_id     BigInt
+  symptoms      String?
+  diagnosis     String?
+  conclusion    String?
+  visit_date    DateTime?       @default(now()) @db.Timestamp(6)
+  status        String?         @default("OPEN") @db.VarChar(20)
+  created_at    DateTime?       @default(now()) @db.Timestamp(6)
+  updated_at    DateTime?       @default(now()) @db.Timestamp(6)
+  users         users           @relation(fields: [doctor_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_record_doctor")
+  patients      patients        @relation(fields: [patient_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_record_patient")
+  prescriptions           prescriptions[]
+  vital_signs             vital_signs[]
+  medical_record_versions medical_record_versions[]
+
+  @@index([doctor_id], map: "idx_record_doctor")
+  @@index([patient_id], map: "idx_record_patient")
+}
+
+model otp_verifications {
+  id         BigInt    @id @default(autoincrement())
+  user_id    BigInt
+  otp_code   String    @db.VarChar(10)
+  expired_at DateTime  @db.Timestamp(6)
+  verified   Boolean?  @default(false)
+  created_at DateTime? @default(now()) @db.Timestamp(6)
+  users      users     @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_otp_user")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model patients {
+  id              BigInt            @id @default(autoincrement())
+  patient_code    String            @unique @db.VarChar(20)
+  full_name       String            @db.VarChar(100)
+  dob             DateTime?         @db.Date
+  gender          String?           @db.VarChar(10)
+  phone           String?           @db.VarChar(20)
+  email           String?           @db.VarChar(100)
+  address         String?
+  citizen_id      String?           @unique @db.VarChar(20)
+  user_id         BigInt?           @unique
+  created_by      BigInt?
+  created_at      DateTime?         @default(now()) @db.Timestamp(6)
+  updated_at      DateTime?         @default(now()) @db.Timestamp(6)
+  audit_logs      audit_logs[]
+  medical_records medical_records[]
+  vital_signs     vital_signs[]
+  user_account    users?            @relation("patient_account", fields: [user_id], references: [id], onUpdate: NoAction, map: "fk_patient_account")
+  users           users?            @relation("patient_creator", fields: [created_by], references: [id], onUpdate: NoAction, map: "fk_patient_creator")
+
+  @@index([patient_code], map: "idx_patient_code")
+  @@index([full_name], map: "idx_patient_name")
+}
+
+model prescription_items {
+  id              BigInt        @id @default(autoincrement())
+  prescription_id BigInt
+  medicine_name   String        @db.VarChar(255)
+  dosage          String?       @db.VarChar(100)
+  frequency       String?       @db.VarChar(100)
+  duration_days   Int?
+  instruction     String?
+  prescriptions   prescriptions @relation(fields: [prescription_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_prescription_item")
+}
+
+model prescriptions {
+  id                 BigInt               @id @default(autoincrement())
+  medical_record_id  BigInt
+  doctor_id          BigInt
+  note               String?
+  created_at         DateTime?            @default(now()) @db.Timestamp(6)
+  prescription_items prescription_items[]
+  users              users                @relation(fields: [doctor_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_prescription_doctor")
+  medical_records    medical_records      @relation(fields: [medical_record_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_prescription_record")
+
+  @@index([medical_record_id], map: "idx_prescription_record")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model users {
+  id                BigInt              @id @default(autoincrement())
+  username          String              @unique @db.VarChar(50)
+  password_hash     String
+  email             String              @unique @db.VarChar(100)
+  full_name         String              @db.VarChar(100)
+  citizen_id        String?             @unique @db.VarChar(20)
+  role              String              @db.VarChar(20)
+  status            String?             @default("PENDING") @db.VarChar(20)
+  mfa_enabled       Boolean?            @default(true)
+  created_at        DateTime?           @default(now()) @db.Timestamp(6)
+  updated_at        DateTime?           @default(now()) @db.Timestamp(6)
+  audit_logs              audit_logs[]
+  medical_records         medical_records[]
+  otp_verifications       otp_verifications[]
+  patient_profile         patients?                 @relation("patient_account")
+  patients                patients[]                @relation("patient_creator")
+  prescriptions           prescriptions[]
+  vital_signs             vital_signs[]
+  medical_record_versions medical_record_versions[]
+}
+
+model vital_signs {
+  id                BigInt          @id @default(autoincrement())
+  patient_id        BigInt
+  medical_record_id BigInt?
+  nurse_id          BigInt
+  temperature       Decimal?        @db.Decimal(4, 1)
+  bp_systolic       Int?
+  bp_diastolic      Int?
+  heart_rate        Int?
+  respiration       Int?
+  spo2              Int?
+  weight            Decimal?        @db.Decimal(5, 2)
+  note              String?
+  created_at        DateTime?       @default(now()) @db.Timestamp(6)
+  patients          patients        @relation(fields: [patient_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_vital_patient")
+  users             users           @relation(fields: [nurse_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_vital_nurse")
+  medical_records   medical_records? @relation(fields: [medical_record_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_vital_record")
+}
+
+model medical_record_versions {
+  id                BigInt    @id @default(autoincrement())
+  medical_record_id BigInt
+  record_code       String    @db.VarChar(20)
+  patient_id        BigInt
+  doctor_id         BigInt
+  symptoms          String?
+  diagnosis         String?
+  conclusion        String?
+  visit_date        DateTime? @db.Timestamp(6)
+  status            String?   @db.VarChar(20)
+  version           Int
+  changed_by        BigInt
+  changed_at        DateTime  @default(now()) @db.Timestamp(6)
+
+  medical_records   medical_records @relation(fields: [medical_record_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_ver_record")
+  users             users           @relation(fields: [changed_by], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_ver_user")
+
+  @@index([medical_record_id], map: "idx_ver_record")
+  @@index([changed_by], map: "idx_ver_user")
+}

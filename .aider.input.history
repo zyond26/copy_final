@@ -1,0 +1,202 @@
+
+# 2026-07-01 16:34:03.381916
++y
+
+# 2026-07-01 16:35:23.572571
++/exit
+
+# 2026-07-01 16:35:25.642418
++n
+
+# 2026-07-01 16:37:40.549431
++fix this  npm start
++
++> backend@1.0.0 start
++> node index.js
++
++◇ injected env (15) from .env // tip: ⌘ custom filepath { path: '/custom/path/.env' }
++/home/tagiahuy/DACK/ISO_27799_Final_Project_CMCu/backend/node_modules/router/index.js:385
++    throw new TypeError('argument handler is required')
++    ^
++
++TypeError: argument handler is required
++    at Function.use (/home/tagiahuy/DACK/ISO_27799_Final_Project_CMCu/backend/node_modules/router/index.js:385:11)
++    at Object.<anonymous> (/home/tagiahuy/DACK/ISO_27799_Final_Project_CMCu/backend/src/routes/role.routes.js:7:8)
++    at Module._compile (node:internal/modules/cjs/loader:1706:14)
++    at Object..js (node:internal/modules/cjs/loader:1839:10)
++    at Module.load (node:internal/modules/cjs/loader:1441:32)
++    at Function._load (node:internal/modules/cjs/loader:1263:12)
++    at TracingChannel.traceSync (node:diagnostics_channel:328:14)
++    at wrapModuleLoad (node:internal/modules/cjs/loader:237:24)
++    at Module.require (node:internal/modules/cjs/loader:1463:12)
++    at require (node:internal/modules/helpers:147:16)
++
++Node.js v22.22.0
+
+# 2026-07-01 16:37:49.462908
++y
+
+# 2026-07-01 16:42:46.044021
++fix this npm start
++
++> backend@1.0.0 start
++> node index.js
++
++◇ injected env (15) from .env // tip: ⌘ custom filepath { path: '/custom/path/.env' }
++/home/tagiahuy/DACK/ISO_27799_Final_Project_CMCu/backend/node_modules/router/index.js:385
++    throw new TypeError('argument handler is required')
++    ^
++
++TypeError: argument handler is required
++    at Function.use (/home/tagiahuy/DACK/ISO_27799_Final_Project_CMCu/backend/node_modules/router/index.js:385:11)
++    at Object.<anonymous> (/home/tagiahuy/DACK/ISO_27799_Final_Project_CMCu/backend/src/routes/role.routes.js:7:8)
++    at Module._compile (node:internal/modules/cjs/loader:1706:14)
++    at Object..js (node:internal/modules/cjs/loader:1839:10)
++    at Module.load (node:internal/modules/cjs/loader:1441:32)
++    at Function._load (node:internal/modules/cjs/loader:1263:12)
++    at TracingChannel.traceSync (node:diagnostics_channel:328:14)
++    at wrapModuleLoad (node:internal/modules/cjs/loader:237:24)
++    at Module.require (node:internal/modules/cjs/loader:1463:12)
++    at require (node:internal/modules/helpers:147:16)
++
++Node.js v22.22.0
+
+# 2026-07-01 16:42:49.212009
++n
+
+# 2026-07-01 16:43:24.777737
++y
+
+# 2026-07-01 16:45:17.530628
++/add backend/src/routes/role.routes.js
+
+# 2026-07-01 16:45:42.952620
++/add 
+
+# 2026-07-01 16:46:42.441181
++fix argument handler is required" at line 7 of role.routes.js
+
+# 2026-07-01 16:47:03.022415
++y
+
+# 2026-07-01 16:47:03.027811
++/run npm start
+
+# 2026-07-01 16:47:03.027876
++/run npm start
+
+# 2026-07-01 16:47:31.293094
++y
+
+# 2026-07-01 16:49:08.886311
++continue to fix it
+
+# 2026-07-01 16:49:47.575098
++y
+
+# 2026-07-01 16:49:47.581092
++/run cd backend
+
+# 2026-07-01 16:49:47.581193
++/run cd backend
+
+# 2026-07-01 16:49:47.765642
++/run npm start
+
+# 2026-07-01 16:49:47.765748
++/run npm start
+
+# 2026-07-01 16:49:51.275067
++y
+
+# 2026-07-01 16:49:55.084370
++/run pwd
+
+# 2026-07-01 16:49:55.084465
++/run pwd
+
+# 2026-07-01 16:49:55.240360
++/run ls -la package.json
+
+# 2026-07-01 16:49:55.240437
++/run ls -la package.json
+
+# 2026-07-01 16:49:55.404298
++/run npm run
+
+# 2026-07-01 16:49:55.404373
++/run npm run
+
+# 2026-07-01 16:49:59.536936
++y
+
+# 2026-07-01 16:50:21.089908
++tagiahuy@tagiahuy-Vostro-15-3510:~/DACK/ISO_27799_Final_Project_CMCu/backend$ npm start
++
++> backend@1.0.0 start
++> node index.js
++
++◇ injected env (15) from .env // tip: ⌘ multiple files { path: ['.env.local', '.env'] }
++/home/tagiahuy/DACK/ISO_27799_Final_Project_CMCu/backend/node_modules/router/index.js:385
++    throw new TypeError('argument handler is required')
++    ^
++
++TypeError: argument handler is required
++    at Function.use (/home/tagiahuy/DACK/ISO_27799_Final_Project_CMCu/backend/node_modules/router/index.js:385:11)
++    at Object.<anonymous> (/home/tagiahuy/DACK/ISO_27799_Final_Project_CMCu/backend/src/routes/role.routes.js:7:8)
++    at Module._compile (node:internal/modules/cjs/loader:1706:14)
++    at Object..js (node:internal/modules/cjs/loader:1839:10)
++    at Module.load (node:internal/modules/cjs/loader:1441:32)
++    at Function._load (node:internal/modules/cjs/loader:1263:12)
++    at TracingChannel.traceSync (node:diagnostics_channel:328:14)
++    at wrapModuleLoad (node:internal/modules/cjs/loader:237:24)
++    at Module.require (node:internal/modules/cjs/loader:1463:12)
++    at require (node:internal/modules/helpers:147:16)
++
++Node.js v22.22.0
+
+# 2026-07-01 16:53:27.095472
++y
+
+# 2026-07-01 16:53:33.925502
++/run npm start
+
+# 2026-07-01 16:53:33.925602
++/run npm start
+
+# 2026-07-01 16:53:38.372840
++y
+
+# 2026-07-01 16:54:13.649104
++t_CMCu/backend$ npm start 
++
++> backend@1.0.0 start
++> node index.js
++
++◇ injected env (15) from .env // tip: ⌘ override existing { override: true }
++/home/tagiahuy/DACK/ISO_27799_Final_Project_CMCu/backend/src/controllers/role.controller.js:172
++module.exports = RoleController;const { PrismaClient } = require('@prisma/client');
++                                        ^
++
++SyntaxError: Identifier 'PrismaClient' has already been declared
++    at wrapSafe (node:internal/modules/cjs/loader:1638:18)
++    at Module._compile (node:internal/modules/cjs/loader:1680:20)
++    at Object..js (node:internal/modules/cjs/loader:1839:10)
++    at Module.load (node:internal/modules/cjs/loader:1441:32)
++    at Function._load (node:internal/modules/cjs/loader:1263:12)
++    at TracingChannel.traceSync (node:diagnostics_channel:328:14)
++    at wrapModuleLoad (node:internal/modules/cjs/loader:237:24)
++    at Module.require (node:internal/modules/cjs/loader:1463:12)
++    at require (node:internal/modules/helpers:147:16)
++    at Object.<anonymous> (/home/tagiahuy/DACK/ISO_27799_Final_Project_CMCu/backend/src/routes/role.routes.js:3:24)
++
++Node.js v22.22.0
+
+# 2026-07-01 16:54:32.955139
++y
+
+# 2026-07-01 16:54:32.960368
++/run npm start
+
+# 2026-07-01 16:54:32.960441
++/run npm start
