@@ -108,28 +108,34 @@ app.use(
 );
 
 // ── CẤU HÌNH CORS ĐỂ CHẠY PRODUCTION ─────────────────────────
+// app.use(cors({
+//   origin: (origin, callback) => {
+//     // 1. Trên môi trường production, một số request (như từ các công cụ kiểm thử, backend gọi nhau, hoặc một số trình duyệt cũ) origin sẽ bị undefined.
+//     // 2. Cho phép FRONTEND_URL từ biến môi trường của Render.
+//     if (!origin) return callback(null, true);
+
+//     const allowedOrigins = [
+//       process.env.FRONTEND_URL,
+//       'http://localhost:3000',
+//       'http://localhost:3001',
+//       'http://localhost:5173',
+//     ].filter(Boolean);
+
+//     // Kiểm tra xem origin của request có nằm trong danh sách cho phép không
+//     // 💡 Mẹo: Thêm điều kiện render.com để tránh lỗi cấu hình nhầm string whitespace
+//     if (allowedOrigins.indexOf(origin) !== -1 || origin.endsWith('.render.com')) {
+//       return callback(null, true);
+//     } else {
+//       const msg = `Chính sách CORS của hệ thống y tế không cho phép truy cập từ origin: ${origin}`;
+//       return callback(new Error(msg), false);
+//     }
+//   },
+//   credentials: true,
+// }));
+
+// Thay vì dùng allowedOrigins phức tạp, tạm thời sửa thành:
 app.use(cors({
-  origin: (origin, callback) => {
-    // 1. Trên môi trường production, một số request (như từ các công cụ kiểm thử, backend gọi nhau, hoặc một số trình duyệt cũ) origin sẽ bị undefined.
-    // 2. Cho phép FRONTEND_URL từ biến môi trường của Render.
-    if (!origin) return callback(null, true);
-
-    const allowedOrigins = [
-      process.env.FRONTEND_URL,
-      'http://localhost:3000',
-      'http://localhost:3001',
-      'http://localhost:5173',
-    ].filter(Boolean);
-
-    // Kiểm tra xem origin của request có nằm trong danh sách cho phép không
-    // 💡 Mẹo: Thêm điều kiện render.com để tránh lỗi cấu hình nhầm string whitespace
-    if (allowedOrigins.indexOf(origin) !== -1 || origin.endsWith('.render.com')) {
-      return callback(null, true);
-    } else {
-      const msg = `Chính sách CORS của hệ thống y tế không cho phép truy cập từ origin: ${origin}`;
-      return callback(new Error(msg), false);
-    }
-  },
+  origin: true, // Cho phép TẤT CẢ các bên gọi tới (Cả local và Render Frontend)
   credentials: true,
 }));
 

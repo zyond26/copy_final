@@ -1,13 +1,15 @@
 import axios from 'axios';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
-
+// const API_URL = 'https://mini-emr-backend-tg4r.onrender.com';
 const axiosInstance = axios.create({
   baseURL: API_URL,
   headers: {
     'Content-Type': 'application/json',
   },
 });
+
+
 
 // Interceptor cho Request: Tự động đính kèm Token JWT từ localStorage
 axiosInstance.interceptors.request.use(
@@ -63,7 +65,7 @@ axiosInstance.interceptors.response.use(
           window.location.href = '/change-password';
         }
       }
-      
+
       // Xử lý lỗi BOLA / IDOR hoặc truy cập trái phép khác
       console.error('[Security Event Tripped] Unauthorized resource access blocked.', error.response?.data);
     }
