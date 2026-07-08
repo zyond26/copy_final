@@ -80,7 +80,7 @@ const errorHandler = require('./src/middlewares/errorHandler');
 const setAuditContext = require('./src/middlewares/auditContext');
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+// const PORT = process.env.PORT || 3000;
 
 // 2. VÁ LỖI "Server Leaks Information via X-Powered-By"
 app.disable('x-powered-by');
@@ -147,6 +147,11 @@ app.get('/', (_req, res) => {
 app.use(errorHandler);
 
 // ── Start Server ────────────────────────────────────────────
+const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
-  console.log(`[Server] Running on http://localhost:${PORT}`);
+  console.log(`Server is running on port ${PORT}`);
 });
+
+// app.listen(PORT, () => {
+//   console.log(`[Server] Running on http://localhost:${PORT}`);
+// });
