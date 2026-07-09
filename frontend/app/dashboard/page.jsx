@@ -11,7 +11,7 @@ import { MedicalRecordTable } from '@/src/components/MedicalRecordTable';
 import { AppointmentCalendar } from '@/src/components/AppointmentCalendar';
 import { useAuth } from '@/src/context/AuthContext';
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://mini-emr-backend-tg4r.onrender.com';
 
 export default function DashboardPage() {
   const router = useRouter();
@@ -246,11 +246,13 @@ export default function DashboardPage() {
   const fetchStats = useCallback(async () => {
     if (!user) return;
     try {
-      // Fetch mock/real counts
+      // Fetch mock/real counts in parallel to optimize speed
       if (user.role === 'ADMIN') {
-        const patientsData = await apiFetch('/api/patients?limit=1');
-        const appointmentsData = await apiFetch('/api/appointments?limit=1');
-        const logsData = await apiFetch('/api/audit-logs?limit=1');
+        const [patientsData, appointmentsData, logsData] = await Promise.all([
+          apiFetch('/api/patients?limit=1'),
+          apiFetch('/api/appointments?limit=1'),
+          apiFetch('/api/audit-logs?limit=1')
+        ]);
         setStats({
           patients: patientsData.data?.total || 0,
           appointments: appointmentsData.data?.total || 0,
@@ -1421,9 +1423,31 @@ export default function DashboardPage() {
           </div>
         </header>
 
-        <div className="dashboard-body-area">
+        <div className="dashboard-body-area" style={{ position: 'relative', minHeight: '350px' }}>
           {error && <Alert variant="danger">{error}</Alert>}
           {success && <Alert variant="success">{success}</Alert>}
+
+          {loading && (
+            <div style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              background: 'rgba(255, 255, 255, 0.65)',
+              backdropFilter: 'blur(2px)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              zIndex: 10,
+              borderRadius: '8px'
+            }}>
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
+                <Spinner />
+                <span style={{ fontSize: '13px', color: 'var(--color-text-muted)', fontWeight: 500 }}>Đang tải dữ liệu...</span>
+              </div>
+            </div>
+          )}
 
           {/* ────────────────────────────────────────────────────────
               TAB: OVERVIEW

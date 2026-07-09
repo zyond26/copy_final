@@ -205,7 +205,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setLoading(true);
     try {
       const res = await axiosInstance.post('/api/auth/change-password', {
-        old_password: oldPass,
+        current_password: oldPass,
         new_password: newPass,
       });
 

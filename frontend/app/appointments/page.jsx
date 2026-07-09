@@ -6,7 +6,7 @@ import {
   Table, Badge, Alert, Modal, PageHeader, Spinner,
 } from '@/components/ui';
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://mini-emr-backend-tg4r.onrender.com';
 
 export default function AppointmentsPage() {
   const [role, setRole] = useState(''); // 'PATIENT' | 'DOCTOR' | 'RECEPTIONIST' | 'ADMIN'

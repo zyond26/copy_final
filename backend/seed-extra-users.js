@@ -10,7 +10,7 @@ async function seed() {
   console.log('--- TẠO TÀI KHOẢN MẪU BỔ SUNG ---');
 
   const password = 'Password123!';
-  const hash = await bcrypt.hash(password, 12);
+  const hash = await bcrypt.hash(password, 10);
 
   const [nurseRole] = await db.$queryRawUnsafe(`SELECT id FROM roles WHERE name = 'NURSE' LIMIT 1`);
   const [receptionistRole] = await db.$queryRawUnsafe(`SELECT id FROM roles WHERE name = 'RECEPTIONIST' LIMIT 1`);

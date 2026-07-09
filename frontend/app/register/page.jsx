@@ -8,7 +8,7 @@ import {
   Alert, Spinner,
 } from '@/components/ui';
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://mini-emr-backend-tg4r.onrender.com';
 
 export default function RegisterPage() {
   const router = useRouter();

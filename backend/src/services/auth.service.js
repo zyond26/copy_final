@@ -12,7 +12,7 @@ const {
   PASSWORD_MAX_AGE_DAYS,
 } = require('../utils/passwordPolicy');
 
-const SALT_ROUNDS = 12;
+const SALT_ROUNDS = 10;
 
 // Chống Brute Force: khóa tài khoản tạm thời sau nhiều lần đăng nhập sai (ISO 27799 §9.4.2)
 const MAX_FAILED_ATTEMPTS = parseInt(process.env.MAX_FAILED_LOGIN_ATTEMPTS, 10) || 5;
@@ -116,7 +116,7 @@ const AuthService = {
     
     // Sinh OTP và gửi email xác thực
     const otpCode = await OtpService.generateAndSave(user.id);
-    await EmailService.sendVerificationOtp(user.email, otpCode);
+    EmailService.sendVerificationOtp(user.email, otpCode).catch(err => console.error('Send verification email error:', err));
 
     return {
       id: user.id.toString(),
@@ -230,7 +230,7 @@ const AuthService = {
     // Nếu MFA bật → sinh OTP, gửi email, trả temporary token
     if (user.mfa_enabled) {
       const otpCode = await OtpService.generateAndSave(user.id);
-      await EmailService.sendLoginOtp(user.email, otpCode);
+      EmailService.sendLoginOtp(user.email, otpCode).catch(err => console.error('Send login MFA email error:', err));
 
       // Tạo temporary token (chỉ dùng cho bước verify MFA, hết hạn nhanh)
       const temporaryToken = jwt.sign(
@@ -331,7 +331,7 @@ const AuthService = {
     }
 
     const otpCode = await OtpService.generateAndSave(user.id);
-    await EmailService.sendPasswordResetOtp(user.email, otpCode);
+    EmailService.sendPasswordResetOtp(user.email, otpCode).catch(err => console.error('Send reset password email error:', err));
 
     return { message: 'Nếu email tồn tại, mã OTP khôi phục mật khẩu đã được gửi.' };
   },

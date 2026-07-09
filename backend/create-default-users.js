@@ -1,7 +1,7 @@
 const bcrypt = require('bcryptjs');
 const prisma = require('./src/config/prisma');
 
-const SALT_ROUNDS = 12;
+const SALT_ROUNDS = 10;
 
 async function seed() {
   console.log('--- KHỞI TẠO TÀI KHOẢN MẪU ---');
