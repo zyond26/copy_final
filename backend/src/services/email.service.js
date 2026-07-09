@@ -1,9 +1,5 @@
 const nodemailer = require('nodemailer');
-
-/**
- * Email Service – gửi email qua SMTP (Nodemailer).
- * Cấu hình SMTP lấy từ biến môi trường.
- */
+const dns = require('dns');
 
 const transporter = nodemailer.createTransport({
   host: process.env.SMTP_HOST,
@@ -14,13 +10,32 @@ const transporter = nodemailer.createTransport({
     pass: process.env.SMTP_PASS,
   },
   tls: {
-    rejectUnauthorized: false // Bỏ qua lỗi chứng chỉ tự ký trên cloud
+    rejectUnauthorized: false, // Bỏ qua lỗi chứng chỉ tự ký trên cloud
+    servername: process.env.SMTP_HOST || 'smtp.gmail.com'
   },
   connectionTimeout: 10000, // 10s timeout tránh treo request
   socketOptions: {
     family: 4 // Ép buộc sử dụng IPv4 ở mức socket
+  },
+  // Tự định nghĩa hàm lookup để ép buộc chỉ trả về IPv4 ở cấp độ DNS của Nodemailer
+  lookup: (hostname, options, callback) => {
+    dns.lookup(hostname, { ...options, family: 4 }, callback);
   }
 });
+
+// Phân giải và ép buộc IP ở mức máy chủ tại thời điểm khởi chạy
+if (process.env.SMTP_HOST && process.env.SMTP_HOST !== 'localhost' && process.env.SMTP_HOST !== '127.0.0.1') {
+  dns.resolve4(process.env.SMTP_HOST, (err, addresses) => {
+    if (!err && addresses && addresses.length > 0) {
+      const ipv4Address = addresses[0];
+      console.log(`[DNS SUCCESS] Phân giải thành công ${process.env.SMTP_HOST} -> IPv4: ${ipv4Address}`);
+      transporter.options.host = ipv4Address;
+      transporter.options.tls.servername = process.env.SMTP_HOST;
+    } else {
+      console.error(`[DNS ERROR] Phân giải ${process.env.SMTP_HOST} thất bại:`, err);
+    }
+  });
+}
 
 const EmailService = {
   /**
