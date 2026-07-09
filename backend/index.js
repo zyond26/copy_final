@@ -156,7 +156,7 @@ app.get('/', (_req, res) => {
 });
 
 // ── SMTP Test Route ─────────────────────────────────────────
-app.get('/api/test-smtp', async (_req, res) => {
+app.get('/test-smtp', async (_req, res) => {
   const nodemailer = require('nodemailer');
   const transporter = nodemailer.createTransport({
     host: process.env.SMTP_HOST || 'smtp.gmail.com',
