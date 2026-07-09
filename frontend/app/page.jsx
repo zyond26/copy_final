@@ -309,7 +309,7 @@ export default function LandingPage() {
 
       {/* Detail Modal */}
       <MedicalDetailModal
-        open={showDetailModal}
+        isOpen={showDetailModal}
         onClose={() => {
           setShowDetailModal(false);
           setTimeout(() => setSelectedMedical(null), 300);
