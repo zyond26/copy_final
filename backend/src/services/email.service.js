@@ -37,6 +37,46 @@ if (process.env.SMTP_HOST && process.env.SMTP_HOST !== 'localhost' && process.en
   });
 }
 
+// Hàm gửi email hỗ trợ cả Resend HTTP API (cổng 443 - không bao giờ bị Render chặn) và Nodemailer SMTP (dành cho local)
+async function sendMailHelper(options) {
+  if (process.env.RESEND_API_KEY) {
+    try {
+      const fromEmail = 'onboarding@resend.dev';
+      const response = await fetch('https://api.resend.com/emails', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${process.env.RESEND_API_KEY}`
+        },
+        body: JSON.stringify({
+          from: fromEmail,
+          to: options.to,
+          subject: options.subject,
+          html: options.html,
+          text: options.text
+        })
+      });
+
+      const data = await response.json();
+      if (response.ok) {
+        console.log(`[RESEND SUCCESS] Đã gửi email thành công tới ${options.to} qua Resend API. ID: ${data.id}`);
+        return { messageId: data.id };
+      } else {
+        console.error('[RESEND ERROR] Phản hồi lỗi từ Resend:', data);
+        throw new Error(data.message || 'Resend API returned error status');
+      }
+    } catch (err) {
+      console.error('[RESEND FETCH ERROR] Không thể gửi email qua Resend:', err.message);
+    }
+  }
+
+  if (process.env.SMTP_USER && process.env.SMTP_PASS) {
+    return await transporter.sendMail(options);
+  }
+
+  throw new Error('Không tìm thấy cấu hình gửi mail hợp lệ (thiếu cả RESEND_API_KEY và SMTP_USER/PASS)');
+}
+
 const EmailService = {
   /**
    * Gửi mã OTP xác thực email (đăng ký tài khoản).
@@ -70,10 +110,10 @@ const EmailService = {
     };
 
     try {
-      const info = await transporter.sendMail(mailOptions);
-      console.log(`[SMTP SUCCESS] Đã gửi verification OTP thành công tới ${to}. Message ID: ${info.messageId}`);
+      const info = await sendMailHelper(mailOptions);
+      console.log(`[SMTP/RESEND SUCCESS] Đã gửi verification OTP thành công tới ${to}. Message ID: ${info.messageId}`);
     } catch (error) {
-      console.error(`[SMTP ERROR] Lỗi gửi verification OTP tới ${to}:`, error);
+      console.error(`[SMTP/RESEND ERROR] Lỗi gửi verification OTP tới ${to}:`, error.message || error);
     }
   },
 
@@ -108,10 +148,10 @@ const EmailService = {
     };
 
     try {
-      const info = await transporter.sendMail(mailOptions);
-      console.log(`[SMTP SUCCESS] Đã gửi login OTP thành công tới ${to}. Message ID: ${info.messageId}`);
+      const info = await sendMailHelper(mailOptions);
+      console.log(`[SMTP/RESEND SUCCESS] Đã gửi login OTP thành công tới ${to}. Message ID: ${info.messageId}`);
     } catch (error) {
-      console.error(`[SMTP ERROR] Lỗi gửi login OTP tới ${to}:`, error);
+      console.error(`[SMTP/RESEND ERROR] Lỗi gửi login OTP tới ${to}:`, error.message || error);
     }
   },
 
@@ -146,10 +186,10 @@ const EmailService = {
     };
 
     try {
-      const info = await transporter.sendMail(mailOptions);
-      console.log(`[SMTP SUCCESS] Đã gửi password reset OTP thành công tới ${to}. Message ID: ${info.messageId}`);
+      const info = await sendMailHelper(mailOptions);
+      console.log(`[SMTP/RESEND SUCCESS] Đã gửi password reset OTP thành công tới ${to}. Message ID: ${info.messageId}`);
     } catch (error) {
-      console.error(`[SMTP ERROR] Lỗi gửi password reset OTP tới ${to}:`, error);
+      console.error(`[SMTP/RESEND ERROR] Lỗi gửi password reset OTP tới ${to}:`, error.message || error);
     }
   },
 
@@ -202,10 +242,10 @@ const EmailService = {
     };
 
     try {
-      const info = await transporter.sendMail(mailOptions);
-      console.log(`[SMTP SUCCESS] Đã gửi appointment status email thành công tới ${to}. Message ID: ${info.messageId}`);
+      const info = await sendMailHelper(mailOptions);
+      console.log(`[SMTP/RESEND SUCCESS] Đã gửi appointment status email thành công tới ${to}. Message ID: ${info.messageId}`);
     } catch (error) {
-      console.error(`[SMTP ERROR] Lỗi gửi appointment status email tới ${to}:`, error);
+      console.error(`[SMTP/RESEND ERROR] Lỗi gửi appointment status email tới ${to}:`, error.message || error);
     }
   },
 };
