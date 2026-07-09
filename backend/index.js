@@ -65,6 +65,12 @@
 
 // ------ new version to implement ------ 
 
+// Force IPv4 DNS resolution order first to prevent IPv6 ENETUNREACH errors on Render
+const dns = require('dns');
+if (typeof dns.setDefaultResultOrder === 'function') {
+  dns.setDefaultResultOrder('ipv4first');
+}
+
 //fix bigint
 BigInt.prototype.toJSON = function () {
   return this.toString();
