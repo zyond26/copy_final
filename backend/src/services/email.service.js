@@ -37,8 +37,46 @@ if (process.env.SMTP_HOST && process.env.SMTP_HOST !== 'localhost' && process.en
   });
 }
 
-// Hàm gửi email hỗ trợ cả Resend HTTP API (cổng 443 - không bao giờ bị Render chặn) và Nodemailer SMTP (dành cho local)
+// Hàm gửi email hỗ trợ cả Brevo/Resend HTTP API (cổng 443 - không bao giờ bị Render chặn) và Nodemailer SMTP (dành cho local)
 async function sendMailHelper(options) {
+  // 1. Kiểm tra cấu hình Brevo HTTP API (Nhận diện tự động nếu pass là xkeysib-)
+  const brevoKey = process.env.BREVO_API_KEY || (process.env.SMTP_PASS && process.env.SMTP_PASS.startsWith('xkeysib-') ? process.env.SMTP_PASS : null);
+  if (brevoKey) {
+    try {
+      console.log(`[Brevo API] Đang gửi email tới ${options.to} qua HTTP API (Cổng 443)...`);
+      const response = await fetch('https://api.brevo.com/v3/smtp/email', {
+        method: 'POST',
+        headers: {
+          'accept': 'application/json',
+          'api-key': brevoKey,
+          'content-type': 'application/json'
+        },
+        body: JSON.stringify({
+          sender: {
+            name: 'Mini EMR',
+            email: process.env.SMTP_USER || 'no-reply@mini-emr.com'
+          },
+          to: [{ email: options.to }],
+          subject: options.subject,
+          htmlContent: options.html,
+          textContent: options.text
+        })
+      });
+
+      const data = await response.json();
+      if (response.ok) {
+        console.log(`[BREVO SUCCESS] Đã gửi email thành công tới ${options.to} qua Brevo API. Message ID: ${data.messageId}`);
+        return { messageId: data.messageId };
+      } else {
+        console.error('[BREVO ERROR] Phản hồi lỗi từ Brevo:', data);
+        throw new Error(data.message || 'Brevo API returned error status');
+      }
+    } catch (err) {
+      console.error('[BREVO FETCH ERROR] Lỗi gửi email qua Brevo HTTP API:', err.message);
+    }
+  }
+
+  // 2. Kiểm tra cấu hình Resend HTTP API
   if (process.env.RESEND_API_KEY) {
     try {
       const fromEmail = 'onboarding@resend.dev';
@@ -70,11 +108,12 @@ async function sendMailHelper(options) {
     }
   }
 
+  // 3. Fallback: SMTP truyền thống
   if (process.env.SMTP_USER && process.env.SMTP_PASS) {
     return await transporter.sendMail(options);
   }
 
-  throw new Error('Không tìm thấy cấu hình gửi mail hợp lệ (thiếu cả RESEND_API_KEY và SMTP_USER/PASS)');
+  throw new Error('Không tìm thấy cấu hình gửi mail hợp lệ (thiếu cả BREVO_API_KEY, RESEND_API_KEY và SMTP_USER/PASS)');
 }
 
 const EmailService = {
