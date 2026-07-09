@@ -22,6 +22,7 @@ const EmailService = {
    * @param {string} otpCode - Mã OTP 6 chữ số
    */
   async sendVerificationOtp(to, otpCode) {
+    console.log(`[MFA/OTP DEBUG] Mã OTP xác thực đăng ký cho ${to} là: ${otpCode}`);
     const mailOptions = {
       from: `"Mini EMR" <${process.env.SMTP_USER}>`,
       to,
@@ -55,6 +56,7 @@ const EmailService = {
    * @param {string} otpCode - Mã OTP 6 chữ số
    */
   async sendLoginOtp(to, otpCode) {
+    console.log(`[MFA/OTP DEBUG] Mã OTP đăng nhập MFA cho ${to} là: ${otpCode}`);
     const mailOptions = {
       from: `"Mini EMR" <${process.env.SMTP_USER}>`,
       to,
@@ -87,6 +89,7 @@ const EmailService = {
    * @param {string} otpCode - Mã OTP 6 chữ số
    */
   async sendPasswordResetOtp(to, otpCode) {
+    console.log(`[MFA/OTP DEBUG] Mã OTP khôi phục mật khẩu cho ${to} là: ${otpCode}`);
     const mailOptions = {
       from: `"Mini EMR" <${process.env.SMTP_USER}>`,
       to,
