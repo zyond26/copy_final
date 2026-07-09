@@ -49,7 +49,10 @@ axiosInstance.interceptors.response.use(
     const status = error.response ? error.response.status : null;
     const data = error.response ? error.response.data : {};
 
-    if (status === 401) {
+    const url = error.config?.url || '';
+    const isAuthRequest = url.includes('/auth/login') || url.includes('/auth/mfa/verify');
+
+    if (status === 401 && !isAuthRequest) {
       // Token hết hạn hoặc không hợp lệ -> Đăng xuất và điều hướng về trang chủ
       if (typeof window !== 'undefined') {
         localStorage.removeItem('access_token');

@@ -34,6 +34,7 @@ const errorHandler = (err, _req, res, _next) => {
   return res.status(statusCode).json({
     status: 'error',
     message: err.message || 'Internal Server Error',
+    seconds_left: err.secondsLeft,
   });
 };
 

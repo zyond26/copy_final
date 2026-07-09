@@ -1219,7 +1219,19 @@ Theo yêu cầu **9.4.3 – Password management**, mật khẩu phải được 
    - Xác định mốc thời gian lọc sinh hiệu trong [vital-signs.service.js](file:///d:/code/DATN/ISO_27799_Final_Project_CMCu/backend/src/services/vital-signs.service.js).
    - Ghi nhận thời gian ký đơn thuốc chính xác xuất ra tệp PDF trong [prescription.controller.js](file:///d:/code/DATN/ISO_27799_Final_Project_CMCu/backend/src/controllers/prescription.controller.js).
 
-## 3.8. Kết luận chương 3
+## 3.8. Danh sách tài khoản kiểm thử hệ thống (Demo Accounts)
+
+Nhóm phát triển sử dụng các tài khoản kiểm thử nhanh sau đây để phục vụ cho quá trình kiểm thử phần mềm (Testing) và rà soát phân quyền (RBAC) nội bộ:
+
+| Vai trò kiểm thử | Email đăng nhập | Mật khẩu truy cập |
+|---|---|---|
+| Quản Trị Viên (Admin) | admin@example.com | Password123! |
+| Bác Sĩ (Doctor) | doctor@example.com | Password123! |
+| Điều Dưỡng (Nurse) | nurse@example.com | Password123! |
+| Lễ Tân (Receptionist) | receptionist@example.com | Password123! |
+| Bệnh Nhân (Patient) | patient@example.com | Password123! |
+
+## 3.9. Kết luận chương 3
 
 Chương 3 đã trình bày chi tiết quá trình phân tích và thiết kế hệ thống Mini EMR, bao gồm:
 

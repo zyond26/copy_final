@@ -110,7 +110,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       }
       throw new Error(data.message || 'Đăng nhập không thành công.');
     } catch (err: any) {
-      throw new Error(err.response?.data?.message || err.message || 'Lỗi hệ thống khi đăng nhập.');
+      const customErr = new Error(err.response?.data?.message || err.message || 'Lỗi hệ thống khi đăng nhập.') as any;
+      customErr.seconds_left = err.response?.data?.seconds_left;
+      throw customErr;
     } finally {
       setLoading(false);
     }

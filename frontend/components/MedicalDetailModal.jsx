@@ -98,6 +98,40 @@ export default function MedicalDetailModal({
           </div>
         )}
 
+        {/* Source & Citation */}
+        {(medicalInfo.source || medicalInfo.citation) && (
+          <div style={{
+            background: '#fcfbf7',
+            border: '1px dashed var(--color-border)',
+            padding: 'var(--space-3)',
+            borderRadius: 'var(--radius-sm)',
+            fontSize: 'var(--text-xs)',
+            color: 'var(--color-text)',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '6px'
+          }}>
+            {medicalInfo.source && (
+              <div>
+                <strong>📍 Nguồn dẫn chứng y khoa:</strong> {medicalInfo.source}
+              </div>
+            )}
+            {medicalInfo.citation && (
+              <div>
+                <strong>🔗 Tài liệu tham khảo gốc:</strong>{' '}
+                <a
+                  href={medicalInfo.citation}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{ color: 'var(--color-primary-deep)', textDecoration: 'underline', fontWeight: 600, wordBreak: 'break-all' }}
+                >
+                  {medicalInfo.citation}
+                </a>
+              </div>
+            )}
+          </div>
+        )}
+
         {/* Tags */}
         {medicalInfo.tags && medicalInfo.tags.length > 0 && (
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--space-2)', borderTop: '1px solid var(--color-border)', paddingTop: 'var(--space-3)', marginTop: 'var(--space-2)' }}>

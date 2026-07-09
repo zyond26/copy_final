@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/src/context/AuthContext';
 import Modal from '../ui/Modal';
@@ -22,6 +22,17 @@ export default function LoginModal({ isOpen, onClose, onSignupClick }) {
   const [requiresMfa, setRequiresMfa] = useState(false);
   const [otpCode, setOtpCode] = useState('');
   const [tempToken, setTempToken] = useState('');
+  
+  // Locked Account countdown timer
+  const [lockCountdown, setLockCountdown] = useState(0);
+
+  useEffect(() => {
+    if (lockCountdown <= 0) return;
+    const timer = setInterval(() => {
+      setLockCountdown((prev) => prev - 1);
+    }, 1000);
+    return () => clearInterval(timer);
+  }, [lockCountdown]);
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -53,6 +64,9 @@ export default function LoginModal({ isOpen, onClose, onSignupClick }) {
         }, 1000);
       }
     } catch (err) {
+      if (err.seconds_left) {
+        setLockCountdown(err.seconds_left);
+      }
       setError(err?.message || 'Đăng nhập thất bại.');
     } finally {
       setLoading(false);
@@ -87,6 +101,10 @@ export default function LoginModal({ isOpen, onClose, onSignupClick }) {
     }
   };
 
+  const displayError = lockCountdown > 0 
+    ? `Tài khoản tạm khóa do đăng nhập sai nhiều lần. Thử lại sau: ${Math.floor(lockCountdown / 60)} phút ${(lockCountdown % 60).toString().padStart(2, '0')} giây.`
+    : error;
+
   return (
     <Modal open={isOpen} onClose={onClose}>
       <div className={styles.container}>
@@ -103,7 +121,7 @@ export default function LoginModal({ isOpen, onClose, onSignupClick }) {
         </div>
 
         {/* Alerts */}
-        {error && <Alert variant="danger">{error}</Alert>}
+        {(displayError || error) && <Alert variant="danger">{displayError || error}</Alert>}
         {success && <Alert variant="success">{success}</Alert>}
 
         {/* Form */}
@@ -117,7 +135,7 @@ export default function LoginModal({ isOpen, onClose, onSignupClick }) {
                 placeholder="you@example.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                disabled={loading}
+                disabled={loading || lockCountdown > 0}
               />
               <FormField
                 label="Mật khẩu"
@@ -126,7 +144,7 @@ export default function LoginModal({ isOpen, onClose, onSignupClick }) {
                 placeholder="••••••••"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                disabled={loading}
+                disabled={loading || lockCountdown > 0}
               />
             </>
           ) : (
@@ -137,14 +155,14 @@ export default function LoginModal({ isOpen, onClose, onSignupClick }) {
               placeholder="000000"
               value={otpCode}
               onChange={(e) => setOtpCode(e.target.value.replace(/\D/g, '').slice(0, 6))}
-              disabled={loading}
+              disabled={loading || lockCountdown > 0}
               maxLength="6"
             />
           )}
 
           <button
             type="submit"
-            disabled={loading}
+            disabled={loading || lockCountdown > 0}
             className="btn btn--primary"
             style={{ width: '100%' }}
           >
@@ -152,6 +170,8 @@ export default function LoginModal({ isOpen, onClose, onSignupClick }) {
               <>
                 <Spinner /> Đang xử lý...
               </>
+            ) : lockCountdown > 0 ? (
+              `⚠️ Đang khóa (${Math.floor(lockCountdown / 60)}:${(lockCountdown % 60).toString().padStart(2, '0')})`
             ) : (
               requiresMfa ? '✓ Xác Thực' : '🔓 Đăng Nhập'
             )}
@@ -161,59 +181,28 @@ export default function LoginModal({ isOpen, onClose, onSignupClick }) {
         {/* Footer */}
         <div className={styles.footer}>
           {!requiresMfa && (
-            <>
-              <div style={{ marginBottom: '0.75rem' }}>
-                <button
-                  type="button"
-                  onClick={() => router.push('/forgot-password')}
-                  className={styles.switchLink}
-                  style={{ marginRight: '1rem' }}
-                >
-                  Quên mật khẩu?
-                </button>
-                <button
-                  type="button"
-                  onClick={() => {
-                    onClose();
-                    setError('');
-                    setSuccess('');
-                    setTimeout(onSignupClick, 200);
-                  }}
-                  className={styles.switchLink}
-                >
-                  Chưa có tài khoản? Đăng ký
-                </button>
-              </div>
-
-              <div style={{ marginTop: '1rem', paddingTop: '1rem', borderTop: '1px dashed var(--color-border)' }}>
-                <h4 style={{ fontSize: '11px', fontWeight: 600, color: 'var(--color-primary-deep)', marginBottom: '0.5rem', textAlign: 'left', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-                  Tài Khoản Kiểm Thử Nhanh (Demo Accounts)
-                </h4>
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '0.5rem', textAlign: 'left' }}>
-                  {[
-                    { label: 'Quản Trị Viên (Admin)', email: 'admin@example.com' },
-                    { label: 'Bác Sĩ (Doctor)', email: 'doctor@example.com' },
-                    { label: 'Điều Dưỡng (Nurse)', email: 'nurse@example.com' },
-                    { label: 'Lễ Tân (Receptionist)', email: 'receptionist@example.com' },
-                    { label: 'Bệnh Nhân (Patient)', email: 'patient@example.com' },
-                  ].map(({ label, email }) => (
-                    <button
-                      key={email}
-                      type="button"
-                      className="btn btn--secondary"
-                      style={{ padding: '6px 8px', fontSize: '10px', height: 'auto', minHeight: 'unset', display: 'flex', flexDirection: 'column', alignItems: 'flex-start', border: '1px solid var(--color-border)', borderRadius: '4px', background: '#fcfbf7', cursor: 'pointer' }}
-                      onClick={() => {
-                        setEmail(email);
-                        setPassword('Password123!');
-                      }}
-                    >
-                      <strong style={{ fontSize: '10px', color: 'var(--color-text)' }}>{label}</strong>
-                      <span style={{ fontSize: '8px', color: 'var(--color-text-muted)', wordBreak: 'break-all' }}>{email}</span>
-                    </button>
-                  ))}
-                </div>
-              </div>
-            </>
+            <div style={{ marginBottom: '0.75rem' }}>
+              <button
+                type="button"
+                onClick={() => router.push('/forgot-password')}
+                className={styles.switchLink}
+                style={{ marginRight: '1rem' }}
+              >
+                Quên mật khẩu?
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  onClose();
+                  setError('');
+                  setSuccess('');
+                  setTimeout(onSignupClick, 200);
+                }}
+                className={styles.switchLink}
+              >
+                Chưa có tài khoản? Đăng ký
+              </button>
+            </div>
           )}
         </div>
       </div>

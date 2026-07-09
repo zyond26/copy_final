@@ -190,9 +190,11 @@ const AuthService = {
 
     // Tài khoản đang bị khóa tạm thời do đăng nhập sai nhiều lần?
     if (user.locked_until && user.locked_until > getCurrentTime()) {
-      const minutesLeft = Math.ceil((user.locked_until - getCurrentTime()) / 60000);
+      const secondsLeft = Math.ceil((user.locked_until.getTime() - getCurrentTime().getTime()) / 1000);
+      const minutesLeft = Math.ceil(secondsLeft / 60);
       const err = new Error(`Tài khoản tạm khóa do đăng nhập sai nhiều lần. Vui lòng thử lại sau ${minutesLeft} phút.`);
       err.statusCode = 403;
+      err.secondsLeft = secondsLeft;
       throw err;
     }
 
@@ -202,12 +204,14 @@ const AuthService = {
       // Tăng bộ đếm sai; đạt ngưỡng thì khóa tạm thời và reset bộ đếm
       const attempts = (user.failed_login_attempts || 0) + 1;
       if (attempts >= MAX_FAILED_ATTEMPTS) {
+        const lockDurationSeconds = LOCK_MINUTES * 60;
         await prisma.users.update({
           where: { id: user.id },
-          data: { failed_login_attempts: 0, locked_until: new Date(getCurrentTime().getTime() + LOCK_MINUTES * 60 * 1000) },
+          data: { failed_login_attempts: 0, locked_until: new Date(getCurrentTime().getTime() + lockDurationSeconds * 1000) },
         });
         const err = new Error(`Đăng nhập sai quá ${MAX_FAILED_ATTEMPTS} lần. Tài khoản bị tạm khóa ${LOCK_MINUTES} phút.`);
         err.statusCode = 403;
+        err.secondsLeft = lockDurationSeconds;
         throw err;
       }
       await prisma.users.update({

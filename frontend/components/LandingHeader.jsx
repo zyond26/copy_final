@@ -19,12 +19,21 @@ export default function LandingHeader() {
     setShowLoginModal(true);
   };
 
+  const scrollToTop = () => {
+    if (typeof window !== 'undefined') {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth',
+      });
+    }
+  };
+
   return (
     <>
       <header className={styles.header}>
         <div className={styles.container}>
           {/* Logo */}
-          <div className={styles.logo}>
+          <div className={styles.logo} onClick={scrollToTop} style={{ cursor: 'pointer' }} role="button" tabIndex={0} onKeyDown={(e) => e.key === 'Enter' && scrollToTop()}>
             <div className={styles.logoIcon}>
               <span>⚕️</span>
             </div>

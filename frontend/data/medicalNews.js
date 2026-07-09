@@ -4,7 +4,10 @@ export const MEDICAL_NEWS = [
     id: 1,
     icon: '🐒',
     title: 'Đậu Mùa Khỉ (Mpox)',
+    category: 'GENERAL',
     summary: 'Cảnh báo: Tổ chức Y tế Thế giới (WHO) tiếp tục giám sát các biến chủng Mpox lây lan nhanh',
+    source: 'Tổ chức Y tế Thế giới (WHO) & Bộ Y tế Việt Nam',
+    citation: 'https://www.who.int/news-room/fact-sheets/detail/monkeypox',
     description: `Mpox (đậu mùa khỉ) là bệnh do virus đậu mùa khỉ gây ra. Đây là bệnh truyền nhiễm cấp tính có khả năng lây lan từ người sang người qua tiếp xúc gần gũi với người bị nhiễm bệnh hoặc vật dụng bị ô nhiễm.
 
 Các triệu chứng thường xuất hiện từ 5-21 ngày sau khi nhiễm virus:
@@ -43,7 +46,10 @@ Biến chứng nguy hiểm:
     id: 2,
     icon: '💓',
     title: 'Bệnh Tim Mạch',
+    category: 'GENERAL',
     summary: 'Bệnh tim mạch là nguyên nhân hàng đầu gây tử vong trên thế giới',
+    source: 'Liên đoàn Tim mạch Thế giới (WHF) & Hội Tim mạch học Việt Nam',
+    citation: 'https://world-heart-federation.org/world-heart-day/',
     description: `Bệnh tim mạch bao gồm các bệnh liên quan đến tim và các mạch máu như: bệnh động mạch vành, tai biến mạch não, suy tim...
 
 Các yếu tố nguy cơ chính:
@@ -89,7 +95,10 @@ Xu hướng hiện tại:
     id: 3,
     icon: '🩺',
     title: 'Tiểu Đường',
+    category: 'GENERAL',
     summary: 'Số người bị tiểu đường tăng gấp 3 lần trong 20 năm qua',
+    source: 'Hiệp hội Đái tháo đường Hoa Kỳ (ADA) & Bộ Y tế Việt Nam',
+    citation: 'https://diabetes.org/',
     description: `Tiểu đường là bệnh mãn tính do cơ thể không thể điều chỉnh lượng đường trong máu. Có 2 loại chính:
 - Tiểu đường type 1: Hệ miễn dịch tấn công tuyến tụy
 - Tiểu đường type 2: Kháng insulin (phổ biến hơn, chiếm 90% các trường hợp)
@@ -135,7 +144,10 @@ Biến chứng nguy hiểm:
     id: 4,
     icon: '🧠',
     title: 'Đột Quỵ Mạch Não',
+    category: 'GENERAL',
     summary: 'Cảnh báo: Đột quỵ có thể xảy ra ở bất kỳ độ tuổi nào',
+    source: 'Tổ chức Đột quỵ Thế giới (WSO) & Hội Đột quỵ Việt Nam',
+    citation: 'https://www.world-stroke.org/',
     description: `Đột quỵ là sự mất máu cấp tính đến não. Có 2 loại chính:
 - Đột quỵ thiếu máu (85%): Do tắc mạch máu não
 - Đột quỵ chảy máu (15%): Do vỡ mạch máu não
@@ -192,7 +204,10 @@ Dấu hiệu cảnh báo (sử dụng BỌ TIÊN):
     id: 5,
     icon: '😷',
     title: 'Cúm Mùa',
+    category: 'GENERAL',
     summary: 'Cúm mùa bùng phát vào mùa đông - cần tiêm vắc xin phòng ngừa',
+    source: 'Trung tâm kiểm soát và phòng ngừa dịch bệnh (CDC Hoa Kỳ)',
+    citation: 'https://www.cdc.gov/flu/',
     description: `Cúm mùa (influenza) là bệnh truyền nhiễm cấp tính do virus influenza gây ra. Là bệnh tự giới hạn nhưng có thể gây biến chứng nặng.
 
 Thống kê và xu hướng:
@@ -239,9 +254,12 @@ Biến chứng có thể xảy ra:
   },
   {
     id: 6,
-    icon: '🦴',
+    icon: 'Bone',
     title: 'Loãng Xương',
+    category: 'GENERAL',
     summary: 'Loãng xương thường im lặng - phát hiện khi xương đã gãy',
+    source: 'Quỹ Loãng xương Quốc tế (IOF)',
+    citation: 'https://www.osteoporosis.foundation/',
     description: `Loãng xương (Osteoporosis) là bệnh mất khối lượng xương, làm xương yếu và dễ gãy. Thường gọi là "bệnh im lặng" vì không có triệu chứng cho đến khi xương gãy.
 
 Thống kê:
@@ -282,7 +300,10 @@ Yếu tố nguy cơ:
     id: 7,
     icon: '🫀',
     title: 'Suy Tim',
+    category: 'GENERAL',
     summary: 'Suy tim là tình trạng tim không bơm máu đủ nuôi cơ thể',
+    source: 'Hội Tim mạch Châu Âu (ESC)',
+    citation: 'https://www.escardio.org/',
     description: `Suy tim là tình trạng tim không thể bơm đủ máu để nuôi nhu cầu của cơ thể. Thường là kết quả của những bệnh khác làm yếu tim.
 
 Phân loại:
@@ -324,5 +345,68 @@ Thống kê:
       'Dùng các thuốc như ACE inhibitor, beta-blocker, nitroglycerin. Cấy máy tạo nhịp hoặc ghép tim trong trường hợp nặng.',
     whenToSeeDoctor:
       'Khó thở tăng lên, sưng chân nhiều, hay mệt mỏi bất thường cần gặp bác sĩ ngay.',
+  },
+  {
+    id: 8,
+    icon: '🐢',
+    title: 'Hội Chứng Cổ Rùa (Text Neck)',
+    category: 'YOUTH',
+    summary: 'Cảnh báo giới trẻ: Tư thế cúi đầu dùng điện thoại liên tục gây biến dạng cột sống',
+    source: 'Hiệp hội Cột sống Bắc Mỹ (NASS) & Bộ Y tế Việt Nam',
+    citation: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7913059/',
+    description: `Hội chứng cổ rùa (Text Neck / Turtle Neck) là tình trạng thoái hóa cột sống cổ do đầu liên tục hướng về phía trước và cúi xuống khi sử dụng điện thoại, máy tính sai tư thế. 
+Đầu người trưởng thành nặng trung bình khoảng 5kg. Khi cúi đầu nhìn màn hình ở góc 60 độ, lực nén lên đốt sống cổ tăng lên tới 27kg - tương đương một đứa trẻ 8 tuổi ngồi trên cổ bạn. 
+
+Lâu ngày, tư thế này làm biến dạng đường cong sinh lý của cột sống, chèn ép dây thần kinh và gây ra những cơn đau mãn tính cực kỳ khó chịu.`,
+    riskLevel: 'MEDIUM',
+    tags: ['Cơ xương khớp', 'Giới trẻ', 'Cảnh báo'],
+    symptoms: [
+      'Đau mỏi cổ, vai, gáy liên tục',
+      'Đầu có xu hướng nhô về phía trước khi đứng tự nhiên',
+      'Tê bì cánh tay hoặc ngón tay do chèn ép thần kinh',
+      'Đau đầu khu vực nửa đầu sau gáy',
+      'Giảm biên độ quay cổ vai',
+    ],
+    prevention: [
+      'Giữ điện thoại ngang tầm mắt khi sử dụng',
+      'Áp dụng quy tắc 20-20-20: Cứ 20 phút làm việc, nhìn xa 20 feet (6m) trong 20 giây',
+      'Thực hiện bài tập kéo cằm (Chin-tuck) để điều chỉnh cột sống cổ',
+      'Đảm bảo bàn làm việc và ghế ngồi có tựa đầu phù hợp',
+    ],
+    treatment: 'Vật lý trị liệu giải chèn ép, chỉnh tư thế lao động và sinh hoạt, chườm ấm hoặc dùng thuốc giảm đau cơ năng nhẹ. Trường hợp chèn ép rễ thần kinh nặng cần can thiệp ngoại khoa chuyên sâu.',
+    whenToSeeDoctor:
+      'Cần đi khám ngay nếu có dấu hiệu tê buốt dọc cánh tay, yếu cơ tay hoặc các cơn đau cổ lan tỏa gây mất ngủ.',
+  },
+  {
+    id: 9,
+    icon: '🌙',
+    title: 'Suy Thận & Đảo Lộn Nhịp Sinh Học Do Thức Khuya',
+    category: 'YOUTH',
+    summary: 'Cảnh báo nguy hiểm: Thói quen thức đêm sau 23h tàn phá chức năng cầu thận của người trẻ',
+    source: 'Hiệp hội Thận học Quốc tế (ISN) & Hội Thận học Việt Nam',
+    citation: 'https://www.kidney.org/news/sleep-deprivation-kidney-disease',
+    description: `Thận hoạt động theo nhịp sinh học 24 giờ. Ban đêm là thời gian cơ thể nghỉ ngơi, huyết áp giảm xuống và thận giảm bớt tải trọng làm việc.
+Khi thức khuya thường xuyên sau 23h, cơ thể bị kích thích tăng tiết hormone cortisol và adrenaline. Việc này làm co mạch máu, giữ nước, dẫn đến tăng huyết áp cục bộ tại các cầu thận. Thận bị ép buộc phải hoạt động quá công suất trong thời gian dài sẽ dẫn đến xơ hóa cầu thận và suy giảm chức năng lọc máu không thể phục hồi.
+
+Đồng thời, mất ngủ kinh niên làm rối loạn hệ miễn dịch và gia tăng nguy cơ tiểu đường, trực tiếp gây ra bệnh thận mãn tính.`,
+    riskLevel: 'HIGH',
+    tags: ['Thận học', 'Nhịp sinh học', 'Lối sống'],
+    symptoms: [
+      'Tiểu đêm nhiều lần hoặc nước tiểu có nhiều bọt lâu tan (tiểu đạm)',
+      'Sưng phù mí mắt hoặc mắt cá chân vào buổi sáng',
+      'Mệt mỏi dai dẳng, khó tập trung, da xanh xao',
+      'Huyết áp tăng cao đột ngột không rõ nguyên nhân',
+      'Đau mỏi vùng thắt lưng dưới',
+    ],
+    prevention: [
+      'Thiết lập thói quen đi ngủ trước 23 giờ đêm',
+      'Đảm bảo giấc ngủ sâu từ 7 - 8 tiếng mỗi ngày',
+      'Hạn chế tuyệt đối các chất kích thích (trà sữa, cà phê, nước tăng lực) vào buổi tối',
+      'Uống đủ 1.5 - 2 lít nước lọc chia đều trong ngày',
+      'Hạn chế đồ ăn mặn, thức ăn nhanh ban đêm',
+    ],
+    treatment: 'Điều chỉnh lối sống, kiểm soát huyết áp bằng thuốc ức chế men chuyển, ăn nhạt, bảo vệ cầu thận. Đối với suy thận giai đoạn cuối cần lọc máu chu kỳ hoặc ghép thận.',
+    whenToSeeDoctor:
+      'Gặp bác sĩ ngay khi thấy nước tiểu sủi bọt nhiều lần liên tiếp, sưng phù nề mi mắt/chân hoặc mệt mỏi suy nhược kéo dài sau các đêm thức muộn.',
   },
 ];

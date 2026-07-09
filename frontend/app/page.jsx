@@ -14,6 +14,7 @@ export default function LandingPage() {
   const { user, token } = useAuth();
   const [selectedMedical, setSelectedMedical] = useState(null);
   const [showDetailModal, setShowDetailModal] = useState(false);
+  const [fontSizeMode, setFontSizeMode] = useState('normal'); // 'normal' | 'large' | 'larger'
 
   // Chuyển hướng nếu đã đăng nhập
   useEffect(() => {
@@ -31,10 +32,43 @@ export default function LandingPage() {
     setShowDetailModal(true);
   };
 
+  const getFontSizeClass = () => {
+    if (fontSizeMode === 'large') return styles.fontLarge;
+    if (fontSizeMode === 'larger') return styles.fontLarger;
+    return '';
+  };
+
   return (
-    <div className={styles.page}>
+    <div className={`${styles.page} ${getFontSizeClass()}`}>
       {/* Header */}
       <LandingHeader />
+
+      {/* Font Size Accessibility Controller */}
+      <div className={styles.accessibilityBar}>
+        <div className={styles.accessibilityContainer}>
+          <span>🎛️ Cỡ chữ (Font size):</span>
+          <div className={styles.btnGroup}>
+            <button 
+              onClick={() => setFontSizeMode('normal')}
+              className={`${styles.fontBtn} ${fontSizeMode === 'normal' ? styles.fontBtnActive : ''}`}
+            >
+              Mặc định (A)
+            </button>
+            <button 
+              onClick={() => setFontSizeMode('large')}
+              className={`${styles.fontBtn} ${fontSizeMode === 'large' ? styles.fontBtnActive : ''}`}
+            >
+              Lớn (A+)
+            </button>
+            <button 
+              onClick={() => setFontSizeMode('larger')}
+              className={`${styles.fontBtn} ${fontSizeMode === 'larger' ? styles.fontBtnActive : ''}`}
+            >
+              Rất lớn (A++)
+            </button>
+          </div>
+        </div>
+      </div>
 
       {/* Hero Section */}
       <section className={styles.hero}>
@@ -113,19 +147,38 @@ export default function LandingPage() {
       <section id="tin-tuc" className={styles.newsSection}>
         <div className={styles.newsContainer}>
           <div className={styles.sectionHeader}>
-            <h2>📰 Tin Tức Y Tế Mới Nhất</h2>
-            <p>Cập nhật thông tin về các bệnh nguy hiểm và cảnh báo sức khỏe hiện nay</p>
+            <h2>📰 Tin Tức Y Tế & Cảnh Báo Sức Khỏe</h2>
+            <p>Cập nhật thông tin y khoa chính thống từ các chuyên gia giúp bảo vệ bản thân và gia đình</p>
           </div>
 
-          {/* Cards Grid */}
-          <div className={styles.cardsGrid}>
-            {MEDICAL_NEWS.map((medical) => (
-              <MedicalInfoCard
-                key={medical.id}
-                {...medical}
-                onClick={() => handleOpenDetail(medical)}
-              />
-            ))}
+          {/* General News Sub-section */}
+          <div style={{ marginBottom: 'var(--space-6)' }}>
+            <h3 className={styles.newsSubheader}>👥 Tin Tức Sức Khỏe Cộng Đồng</h3>
+            <p className={styles.newsSubdesc}>Các bệnh lý phổ biến và phương pháp phòng ngừa chủ động dành cho mọi người</p>
+            <div className={styles.cardsGrid}>
+              {MEDICAL_NEWS.filter(item => item.category === 'GENERAL').map((medical) => (
+                <MedicalInfoCard
+                  key={medical.id}
+                  {...medical}
+                  onClick={() => handleOpenDetail(medical)}
+                />
+              ))}
+            </div>
+          </div>
+
+          {/* Youth News Sub-section */}
+          <div>
+            <h3 className={styles.newsSubheader} style={{ color: '#1a7a3c', borderLeftColor: '#1a7a3c' }}>⚡ Góc Cảnh Báo Giới Trẻ</h3>
+            <p className={styles.newsSubdesc}>Đặc biệt cảnh báo về nhịp sinh học, lối sống và các hội chứng văn phòng phổ biến</p>
+            <div className={styles.cardsGrid}>
+              {MEDICAL_NEWS.filter(item => item.category === 'YOUTH').map((medical) => (
+                <MedicalInfoCard
+                  key={medical.id}
+                  {...medical}
+                  onClick={() => handleOpenDetail(medical)}
+                />
+              ))}
+            </div>
           </div>
         </div>
       </section>

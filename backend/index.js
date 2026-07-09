@@ -155,6 +155,35 @@ app.get('/', (_req, res) => {
   res.json({ status: 'ok', message: 'Mini EMR API is running.' });
 });
 
+// ── SMTP Test Route ─────────────────────────────────────────
+app.get('/api/test-smtp', async (_req, res) => {
+  const nodemailer = require('nodemailer');
+  const transporter = nodemailer.createTransport({
+    host: process.env.SMTP_HOST || 'smtp.gmail.com',
+    port: parseInt(process.env.SMTP_PORT || '587', 10),
+    secure: false,
+    auth: {
+      user: process.env.SMTP_USER,
+      pass: process.env.SMTP_PASS,
+    },
+  });
+  try {
+    await transporter.verify();
+    
+    // Gửi email thử nghiệm
+    await transporter.sendMail({
+      from: `"${process.env.SMTP_USER}" <${process.env.SMTP_USER}>`,
+      to: 'benhviendoan@gmail.com',
+      subject: 'Render SMTP Diagnoses Test',
+      text: 'SMTP is working fine on Render!',
+    });
+    
+    res.json({ status: 'success', message: 'SMTP connection and email sending verified successfully!' });
+  } catch (err) {
+    res.status(500).json({ status: 'error', message: err.message, stack: err.stack });
+  }
+});
+
 // ── Global Error Handler ────────────────────────────────────
 app.use(errorHandler);
 
