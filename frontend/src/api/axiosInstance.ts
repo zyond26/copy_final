@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
-// const API_URL = 'https://mini-emr-backend-tg4r.onrender.com';
+//const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
+const API_URL = 'https://mini-emr-backend-tg4r.onrender.com';
 const axiosInstance = axios.create({
   baseURL: API_URL,
   headers: {
