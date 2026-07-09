@@ -5,6 +5,10 @@ let hasSynced = false;
  * Fetches the precise time from the local time service and calculates the offset.
  */
 async function syncTime() {
+  if (process.env.RENDER || process.env.NODE_ENV === 'production') {
+    // Bỏ qua đồng bộ giờ local khi chạy trên production hoặc Render
+    return false;
+  }
   try {
     const res = await fetch('http://localhost:8000/api/time');
     if (!res.ok) {
