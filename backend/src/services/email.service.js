@@ -9,11 +9,17 @@ const transporter = nodemailer.createTransport({
   host: process.env.SMTP_HOST,
   port: parseInt(process.env.SMTP_PORT, 10),
   secure: false, // true for 465, false for other ports
-  family: 4, // Ép buộc kết nối bằng IPv4 thay vì IPv6
   auth: {
     user: process.env.SMTP_USER,
     pass: process.env.SMTP_PASS,
   },
+  tls: {
+    rejectUnauthorized: false // Bỏ qua lỗi chứng chỉ tự ký trên cloud
+  },
+  connectionTimeout: 10000, // 10s timeout tránh treo request
+  socketOptions: {
+    family: 4 // Ép buộc sử dụng IPv4 ở mức socket
+  }
 });
 
 const EmailService = {
@@ -48,7 +54,12 @@ const EmailService = {
       },
     };
 
-    await transporter.sendMail(mailOptions);
+    try {
+      const info = await transporter.sendMail(mailOptions);
+      console.log(`[SMTP SUCCESS] Đã gửi verification OTP thành công tới ${to}. Message ID: ${info.messageId}`);
+    } catch (error) {
+      console.error(`[SMTP ERROR] Lỗi gửi verification OTP tới ${to}:`, error);
+    }
   },
 
   /**
@@ -81,7 +92,12 @@ const EmailService = {
       },
     };
 
-    await transporter.sendMail(mailOptions);
+    try {
+      const info = await transporter.sendMail(mailOptions);
+      console.log(`[SMTP SUCCESS] Đã gửi login OTP thành công tới ${to}. Message ID: ${info.messageId}`);
+    } catch (error) {
+      console.error(`[SMTP ERROR] Lỗi gửi login OTP tới ${to}:`, error);
+    }
   },
 
   /**
@@ -114,7 +130,12 @@ const EmailService = {
       },
     };
 
-    await transporter.sendMail(mailOptions);
+    try {
+      const info = await transporter.sendMail(mailOptions);
+      console.log(`[SMTP SUCCESS] Đã gửi password reset OTP thành công tới ${to}. Message ID: ${info.messageId}`);
+    } catch (error) {
+      console.error(`[SMTP ERROR] Lỗi gửi password reset OTP tới ${to}:`, error);
+    }
   },
 
   /**
@@ -165,7 +186,12 @@ const EmailService = {
       text: `Xin chào ${patientName},\nLịch hẹn khám ${appointmentCode} đã được cập nhật trạng thái sang: ${statusText}.\nBác sĩ: ${doctorName}\nThời gian: ${new Date(date).toLocaleString('vi-VN')}\nCảm ơn bạn đã sử dụng dịch vụ.`,
     };
 
-    await transporter.sendMail(mailOptions);
+    try {
+      const info = await transporter.sendMail(mailOptions);
+      console.log(`[SMTP SUCCESS] Đã gửi appointment status email thành công tới ${to}. Message ID: ${info.messageId}`);
+    } catch (error) {
+      console.error(`[SMTP ERROR] Lỗi gửi appointment status email tới ${to}:`, error);
+    }
   },
 };
 
